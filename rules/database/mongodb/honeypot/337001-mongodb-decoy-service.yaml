@@ -1,0 +1,20 @@
+id: 337001
+defaultPort: 27017
+name: "MongoDB 诱捕服务"
+nameEn: "MongoDB Decoy Service"
+cve: null
+category: "honeypot"
+vendor: "MongoDB"
+product: "MongoDB"
+severity: "info"
+references:
+  - "https://www.mongodb.com/docs/manual/reference/mongodb-wire-protocol/"
+tags: ["mongodb", "database", "honeypot", "discovery"]
+ruleVersion: "0.1.0-alpha.1"
+descriptionZh: "提供可被服务探测识别的 MongoDB 握手、构建信息和服务状态响应。"
+descriptionEn: "Provides identifiable MongoDB handshake, build information, and server status responses."
+protocol: "mongodb"
+configYaml:
+  server_version: "7.0.14-veydeck"
+  hostname: "mongodb-veydeck"
+  max_wire_version: 21

@@ -1,0 +1,20 @@
+id: 707001
+defaultPort: 445
+name: "SMB 诱捕服务"
+nameEn: "SMB Decoy Service"
+cve: null
+category: "honeypot"
+vendor: "Microsoft"
+product: "SMB"
+severity: "info"
+references:
+  - "https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-smb2/"
+tags: ["smb", "enterprise", "honeypot"]
+ruleVersion: "0.1.0-alpha.1"
+descriptionZh: "响应 SMB2 协商探测并记录横向移动扫描，不开放真实共享。"
+descriptionEn: "Responds to SMB2 negotiation probes and records lateral scans without exposing real shares."
+protocol: "smb"
+configYaml:
+  server_name: "FILESRV01"
+  domain: "LAB"
+  shares: ["Public", "Archive"]

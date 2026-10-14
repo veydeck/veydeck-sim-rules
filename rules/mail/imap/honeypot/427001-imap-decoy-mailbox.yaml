@@ -1,0 +1,50 @@
+id: 427001
+defaultPort: 143
+name: "IMAP 诱捕邮箱"
+nameEn: "IMAP Decoy Mailbox"
+cve: null
+category: "honeypot"
+vendor: "Generic"
+product: "IMAP Server"
+severity: "info"
+references:
+  - "https://datatracker.ietf.org/doc/html/rfc9051"
+tags:
+  - "imap"
+  - "mail"
+  - "honeypot"
+  - "mailbox"
+ruleVersion: "0.1.0-alpha.1"
+descriptionZh: "仿真 IMAP 邮箱服务，提供 INBOX 选择、状态查询和静态邮件读取响应。"
+descriptionEn: "Simulates an IMAP mailbox service with INBOX selection, status queries, and static message retrieval responses."
+protocol: "imap"
+configYaml:
+  banner: "Veydeck IMAP service ready"
+  require_auth: true
+  credentials:
+    - username: "audit@example.test"
+      password: "VeydeckMail!2026"
+      display_name: "Audit Mailbox"
+  capabilities:
+    - "IMAP4rev1"
+    - "UIDPLUS"
+    - "AUTH=PLAIN"
+  mailboxes:
+    INBOX:
+      - uid: "1001"
+        from: "security@example.test"
+        to:
+          - "audit@example.test"
+        subject: "Suspicious login review"
+        date: "Tue, 16 Jun 2026 09:45:00 +0000"
+        flags:
+          - "\\Seen"
+        body: "This IMAP decoy message is used to validate Veydeck protocol simulation."
+      - uid: "1002"
+        from: "noreply@example.test"
+        to:
+          - "audit@example.test"
+        subject: "Mailbox quota notice"
+        date: "Tue, 16 Jun 2026 10:15:00 +0000"
+        flags: []
+        body: "Mailbox quota is within the expected test range."

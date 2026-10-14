@@ -1,0 +1,94 @@
+name: Publish Simulation Rules
+
+run-name: "Simulation Rules ${{ inputs.version }}"
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Rules package version
+        required: true
+        default: 0.1.0-alpha.1
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install minisign
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends minisign
+
+      - name: Verify package version
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+        shell: bash
+        run: |
+          CARGO_VERSION="$(awk -F '"' '/^version = / { print $2; exit }' Cargo.toml)"
+          if [ "$CARGO_VERSION" != "$RELEASE_VERSION" ]; then
+            echo "Cargo.toml version is $CARGO_VERSION, expected $RELEASE_VERSION"
+            exit 1
+          fi
+
+      - name: Check formatting
+        run: cargo fmt --check
+
+      - name: Run tests
+        run: cargo test --locked
+
+      - name: Prepare signing key
+        env:
+          PRIVATE_KEY_CONTENT: ${{ secrets.VEYDECK_SIGNING_PRIVATE_KEY }}
+        shell: bash
+        run: |
+          if [ -z "$PRIVATE_KEY_CONTENT" ]; then
+            echo "Missing secret: VEYDECK_SIGNING_PRIVATE_KEY"
+            exit 1
+          fi
+
+          KEY_PATH="$RUNNER_TEMP/veydeck-sim-rules.key"
+          printf '%s' "$PRIVATE_KEY_CONTENT" > "$KEY_PATH"
+          chmod 600 "$KEY_PATH"
+          echo "VEYDECK_SIGNING_PRIVATE_KEY=$KEY_PATH" >> "$GITHUB_ENV"
+
+      - name: Build signed rules package
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+          VEYDECK_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.VEYDECK_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: cargo run --locked --bin pack -- "$RELEASE_VERSION"
+
+      - name: Reject existing release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.version }}
+        shell: bash
+        run: |
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo "Release already exists: $RELEASE_TAG"
+            exit 1
+          fi
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_VERSION: ${{ inputs.version }}
+          RELEASE_TAG: ${{ inputs.version }}
+        shell: bash
+        run: |
+          ASSET="dist/veydeck-sim-rules-$RELEASE_VERSION.vprp"
+          if [ ! -f "$ASSET" ]; then
+            echo "Release asset not found: $ASSET"
+            exit 1
+          fi
+
+          gh release create "$RELEASE_TAG" "$ASSET" \
+            --title "veydeck-sim-rules $RELEASE_VERSION" \
+            --notes "Veydeck simulation rules package: $RELEASE_VERSION"

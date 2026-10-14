@@ -1,0 +1,19 @@
+id: 647001
+defaultPort: 5900
+name: "VNC 诱捕服务"
+nameEn: "VNC Decoy Service"
+cve: null
+category: "honeypot"
+vendor: "Veydeck"
+product: "VNC"
+severity: "info"
+references:
+  - "https://www.rfc-editor.org/rfc/rfc6143"
+tags: ["vnc", "rfb", "remote-access", "honeypot", "discovery"]
+ruleVersion: "0.1.0-alpha.1"
+descriptionZh: "提供可被服务探测识别的 RFB 版本和安全类型协商。"
+descriptionEn: "Provides identifiable RFB version and security type negotiation."
+protocol: "vnc"
+configYaml:
+  protocol_version: "3.8"
+  security_types: ["none"]

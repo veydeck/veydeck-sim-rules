@@ -1,0 +1,17 @@
+[package]
+name = "veydeck-sim-rules"
+version = "0.1.0-alpha.1"
+edition = "2024"
+authors = ["gwj"]
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_yaml = "0.9"
+prost = { version = "0.13", features = ["derive"] }
+ring = { version = "0.17" }
+hex = { version = "0.4" }
+flate2 = { version = "1" }
+tar = { version = "0.4" }
+base64 = { version = "0.22" }
+clap = { version = "4", features = ["derive"] }

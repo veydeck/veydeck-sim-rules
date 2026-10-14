@@ -1,0 +1,22 @@
+id: 507001
+defaultPort: 53
+name: "DNS 诱捕解析服务"
+nameEn: "DNS Decoy Resolver"
+cve: null
+category: "honeypot"
+vendor: "Veydeck"
+product: "DNS Simulation"
+severity: "info"
+references:
+  - "https://www.rfc-editor.org/rfc/rfc1035"
+tags: ["dns", "tcp", "udp", "honeypot"]
+ruleVersion: "0.1.0-alpha.1"
+descriptionZh: "通过同一规则同时模拟 DNS TCP 与 UDP A 记录查询，并审计名称解析探测。"
+descriptionEn: "Simulates DNS A-record queries over TCP and UDP in one rule and audits name-resolution probes."
+protocol: "dns"
+configYaml:
+  records:
+    "dns.veydeck.local": "192.0.2.53"
+    "files.veydeck.local": "192.0.2.80"
+  default_ipv4: "192.0.2.53"
+  ttl: 60

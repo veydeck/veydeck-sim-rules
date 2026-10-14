@@ -1,0 +1,47 @@
+id: 302001
+defaultPort: 6379
+name: "Redis 未授权访问"
+nameEn: "Redis Unauthorized Access"
+cve: null
+category: "vuln_sim"
+vendor: "Redis"
+product: "Redis"
+severity: "high"
+references:
+  - "https://redis.io/docs/latest/operate/oss_and_stack/management/security/"
+tags:
+  - "redis"
+  - "database"
+  - "unauthorized-access"
+  - "tcp"
+ruleVersion: "0.1.0-alpha.1"
+descriptionZh: "仿真 Redis 未授权访问服务，响应常见探测命令并标记高风险管理命令。"
+descriptionEn: "Simulates Redis unauthorized access behavior, responding to common probe commands and flagging high-risk administrative commands."
+protocol: "redis"
+configYaml:
+  require_auth: false
+  server_info:
+    role: "master"
+    connected_slaves: "0"
+    db0: "keys=4,expires=0,avg_ttl=0"
+  keys:
+    session:admin: "example-session-token"
+    config:database: "mysql://app:example@127.0.0.1:3306/app"
+    queue:jobs: "pending"
+    feature:flag: "enabled"
+  command_responses:
+    - command: "CONFIG"
+      response: "ERR unknown command 'CONFIG', with args beginning with:"
+      event_type: "exploit_attempt"
+    - command: "SLAVEOF"
+      response: "ERR command is disabled in this simulation"
+      event_type: "exploit_attempt"
+    - command: "REPLICAOF"
+      response: "ERR command is disabled in this simulation"
+      event_type: "exploit_attempt"
+    - command: "MODULE"
+      response: "ERR command is disabled in this simulation"
+      event_type: "exploit_attempt"
+    - command: "EVAL"
+      response: "ERR command is disabled in this simulation"
+      event_type: "exploit_attempt"

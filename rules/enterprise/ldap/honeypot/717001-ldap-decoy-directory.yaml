@@ -1,0 +1,24 @@
+id: 717001
+defaultPort: 389
+name: "LDAP 诱捕目录"
+nameEn: "LDAP Decoy Directory"
+cve: null
+category: "honeypot"
+vendor: "OpenLDAP"
+product: "LDAP"
+severity: "info"
+references:
+  - "https://www.rfc-editor.org/rfc/rfc4511"
+tags: ["ldap", "directory", "honeypot"]
+ruleVersion: "0.1.0-alpha.1"
+descriptionZh: "模拟 LDAP 绑定和搜索结果并审计目录枚举行为。"
+descriptionEn: "Simulates LDAP bind and search results while auditing directory enumeration."
+protocol: "ldap"
+configYaml:
+  base_dn: "dc=lab,dc=example"
+  credentials:
+    - username: "cn=reader,dc=lab,dc=example"
+      password: "example-only"
+  entries:
+    - dn: "ou=People,dc=lab,dc=example"
+      objectClass: "organizationalUnit"

@@ -1,0 +1,18 @@
+id: 527001
+defaultPort: 1883
+name: "MQTT 诱捕 Broker"
+nameEn: "MQTT Decoy Broker"
+cve: null
+category: "honeypot"
+vendor: "Veydeck"
+product: "MQTT Broker"
+severity: "info"
+references:
+  - "https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html"
+tags: ["mqtt", "messaging", "iot", "honeypot", "discovery"]
+ruleVersion: "0.1.0-alpha.1"
+descriptionZh: "提供可被服务探测识别的 MQTT 3.1.1/5 连接确认和心跳响应。"
+descriptionEn: "Provides identifiable MQTT 3.1.1/5 connection acknowledgement and heartbeat responses."
+protocol: "mqtt"
+configYaml:
+  allow_anonymous: true

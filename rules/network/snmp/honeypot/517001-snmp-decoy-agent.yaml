@@ -1,0 +1,23 @@
+id: 517001
+defaultPort: 161
+name: "SNMP 诱捕 Agent"
+nameEn: "SNMP Decoy Agent"
+cve: null
+category: "honeypot"
+vendor: "Veydeck"
+product: "SNMP Agent"
+severity: "info"
+references:
+  - "https://www.rfc-editor.org/rfc/rfc3416"
+tags: ["snmp", "network", "udp", "honeypot", "discovery"]
+ruleVersion: "0.1.0-alpha.1"
+descriptionZh: "提供可被服务探测识别的 SNMP v1/v2c 系统信息和 OID 响应。"
+descriptionEn: "Provides identifiable SNMP v1/v2c system information and OID responses."
+protocol: "snmp"
+configYaml:
+  community: "public"
+  system_description: "Linux veydeck-snmp 6.8.0"
+  system_name: "snmp-veydeck"
+  system_location: "Veydeck"
+  oids:
+    "1.3.6.1.2.1.1.4.0": "admin@veydeck.local"

@@ -1,0 +1,46 @@
+id: 307001
+defaultPort: 6379
+name: "Redis 诱捕服务"
+nameEn: "Redis Decoy Service"
+cve: null
+category: "honeypot"
+vendor: "Redis"
+product: "Redis"
+severity: "info"
+references:
+  - "https://redis.io/docs/latest/operate/oss_and_stack/management/security/"
+tags:
+  - "redis"
+  - "database"
+  - "honeypot"
+  - "decoy"
+ruleVersion: "0.1.0-alpha.1"
+descriptionZh: "仿真暴露在内网中的 Redis 诱捕服务，提供有限键值和管理命令响应，用于记录横向移动和自动化扫描行为。"
+descriptionEn: "Simulates an internal Redis decoy service with limited key/value data and management command responses to record lateral movement and automated scanning behavior."
+protocol: "redis"
+configYaml:
+  require_auth: false
+  server_info:
+    role: "master"
+    redis_mode: "standalone"
+    connected_clients: "1"
+    db0: "keys=5,expires=0,avg_ttl=0"
+  keys:
+    cache:user:1001: "example-user-profile"
+    session:blue-team: "example-session-id"
+    job:queue: "pending"
+    feature:beta: "false"
+    metrics:last_sync: "2026-06-05T00:00:00Z"
+  command_responses:
+    - command: "INFO"
+      response: "redis_version:6.2.14 role:master connected_clients:1"
+      event_type: "redis_command"
+    - command: "KEYS"
+      response: "cache:user:1001 session:blue-team job:queue feature:beta metrics:last_sync"
+      event_type: "exploit_attempt"
+    - command: "FLUSHALL"
+      response: "ERR command is disabled in this simulation"
+      event_type: "exploit_attempt"
+    - command: "CONFIG"
+      response: "ERR command is disabled in this simulation"
+      event_type: "exploit_attempt"

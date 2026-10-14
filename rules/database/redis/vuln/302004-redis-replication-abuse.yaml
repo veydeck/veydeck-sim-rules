@@ -1,0 +1,46 @@
+id: 302004
+defaultPort: 6379
+name: "Redis 主从复制攻击探测"
+nameEn: "Redis Replication Abuse Probe"
+cve: null
+category: "vuln_sim"
+vendor: "Redis"
+product: "Redis"
+severity: "high"
+references:
+  - "https://redis.io/docs/latest/operate/oss_and_stack/management/replication/"
+tags:
+  - "redis"
+  - "database"
+  - "replication"
+  - "module-load"
+ruleVersion: "0.1.0-alpha.1"
+descriptionZh: "仿真 Redis 主从复制与模块加载攻击链探测，识别 SLAVEOF、REPLICAOF、MODULE LOAD 等高危命令。"
+descriptionEn: "Simulates Redis replication and module-loading attack-chain probes, identifying high-risk commands such as SLAVEOF, REPLICAOF, and MODULE LOAD."
+protocol: "redis"
+configYaml:
+  require_auth: false
+  server_info:
+    role: "master"
+    connected_slaves: "0"
+    repl_backlog_active: "1"
+  keys:
+    replication:status: "standalone"
+  command_responses:
+    - command: "SLAVEOF"
+      response: "ERR replication reconfiguration is disabled in this simulation"
+      event_type: "exploit_attempt"
+    - command: "REPLICAOF"
+      response: "ERR replication reconfiguration is disabled in this simulation"
+      event_type: "exploit_attempt"
+    - command: "MODULE"
+      args_contains:
+        - "load"
+      response: "ERR module loading is disabled in this simulation"
+      event_type: "exploit_attempt"
+    - command: "CONFIG"
+      args_contains:
+        - "set"
+        - "dir"
+      response: "ERR CONFIG SET dir is disabled in this simulation"
+      event_type: "exploit_attempt"

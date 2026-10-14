@@ -1,0 +1,25 @@
+id: 637001
+defaultPort: 23
+name: "Telnet 诱捕服务"
+nameEn: "Telnet Decoy Service"
+cve: null
+category: "honeypot"
+vendor: "Generic"
+product: "Telnet"
+severity: "info"
+references:
+  - "https://www.rfc-editor.org/rfc/rfc854"
+tags: ["telnet", "honeypot", "remote_access"]
+ruleVersion: "0.1.0-alpha.1"
+descriptionZh: "模拟遗留设备 Telnet 登录与命令交互并审计口令猜测。"
+descriptionEn: "Simulates a legacy Telnet login and command shell while auditing credential guesses."
+protocol: "telnet"
+configYaml:
+  banner: "Embedded Linux 4.19\r\n"
+  prompt: "device# "
+  credentials:
+    - username: "admin"
+      password: "admin"
+  command_responses:
+    uname: "Linux gateway 4.19.0 armv7l"
+    id: "uid=0(root) gid=0(root)"

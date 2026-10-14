@@ -1,0 +1,21 @@
+id: 347001
+defaultPort: 11211
+name: "Memcached 诱捕服务"
+nameEn: "Memcached Decoy Service"
+cve: null
+category: "honeypot"
+vendor: "Memcached"
+product: "Memcached"
+severity: "info"
+references:
+  - "https://docs.memcached.org/protocols/"
+tags: ["memcached", "database", "cache", "honeypot", "discovery"]
+ruleVersion: "0.1.0-alpha.1"
+descriptionZh: "提供可被服务探测识别的 Memcached 版本和统计信息响应。"
+descriptionEn: "Provides identifiable Memcached version and statistics responses."
+protocol: "memcached"
+configYaml:
+  server_version: "1.6.24"
+  stats:
+    accepting_conns: "1"
+    auth_enabled_sasl: "no"

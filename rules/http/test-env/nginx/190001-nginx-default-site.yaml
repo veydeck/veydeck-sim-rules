@@ -1,0 +1,32 @@
+id: 190001
+defaultPort: 8080
+name: "Nginx 1.24 极客高保真诱捕模板"
+nameEn: "Nginx 1.24 High-Fidelity Trap Template (CVE)"
+cve: null
+category: "test_env"
+vendor: "F5 NGINX"
+product: "NGINX"
+severity: "info"
+references:
+  - "https://nginx.org/en/docs/"
+tags:
+  - "http"
+  - "nginx"
+  - "test-env"
+ruleVersion: "0.1.0-alpha.1"
+descriptionZh: "模拟 Nginx 1.24 默认站点与常见探测路径，用于搭建通用 HTTP 测试环境并记录访问行为。"
+descriptionEn: "Simulates an NGINX 1.24 default site and common probe paths for generic HTTP test environment coverage."
+protocol: "http"
+configYaml:
+  server_header: "nginx/1.24.0 (Ubuntu)"
+  html: |
+    <!DOCTYPE html><html><head><title>Welcome to nginx!</title><style>body{width:35em;margin:0 auto;font-family:Tahoma,Verdana,Arial,sans-serif;background:#0d1117;color:#c9d1d9;padding-top:80px;}h1{color:#58a6ff;}a{color:#1f6feb;}</style></head><body><h1>Welcome to nginx!</h1><p>If you see this page, the nginx web server is successfully installed and working.</p><p><em>Thank you for using nginx.</em></p></body></html>
+  exploit_paths:
+    - path: "/shell"
+      trigger_method: "POST"
+      response_status: 500
+      response_body: '{"status":"error","message":"Root shell access denied (UID 0)"}'
+    - path: "/.env"
+      trigger_method: "GET"
+      response_status: 404
+      response_body: "Not Found"

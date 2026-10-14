@@ -1,0 +1,43 @@
+id: 407001
+defaultPort: 25
+name: "SMTP 诱捕服务"
+nameEn: "SMTP Decoy Service"
+cve: null
+category: "honeypot"
+vendor: "Generic"
+product: "SMTP Server"
+severity: "info"
+references:
+  - "https://datatracker.ietf.org/doc/html/rfc5321"
+tags:
+  - "smtp"
+  - "mail"
+  - "honeypot"
+  - "decoy"
+ruleVersion: "0.1.0-alpha.1"
+descriptionZh: "仿真暴露在网络中的 SMTP 邮件网关，记录认证尝试、收件人探测和投递行为。"
+descriptionEn: "Simulates an exposed SMTP mail gateway and records authentication attempts, recipient probes, and delivery behavior."
+protocol: "smtp"
+configYaml:
+  banner: "mail.veydeck.local ESMTP Veydeck Mail Gateway"
+  hostname: "mail.veydeck.local"
+  require_auth: true
+  credentials:
+    - username: "audit@example.test"
+      password: "VeydeckMail!2026"
+      display_name: "Audit Mailbox"
+  capabilities:
+    - "PIPELINING"
+    - "SIZE 52428800"
+    - "8BITMIME"
+  accepted_recipients:
+    - "security@example.test"
+    - "postmaster@example.test"
+    - "audit@example.test"
+  custom_responses:
+    - command: "VRFY"
+      response: "252 2.5.2 Cannot VRFY user, but will accept message"
+      event_type: "exploit_attempt"
+    - command: "EXPN"
+      response: "550 5.7.1 Mailing list expansion disabled"
+      event_type: "exploit_attempt"

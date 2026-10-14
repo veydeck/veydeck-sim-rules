@@ -1,0 +1,50 @@
+id: 302003
+defaultPort: 6379
+name: "Redis CONFIG 写入探测"
+nameEn: "Redis CONFIG Write Probe"
+cve: null
+category: "vuln_sim"
+vendor: "Redis"
+product: "Redis"
+severity: "high"
+references:
+  - "https://redis.io/docs/latest/commands/config-set/"
+tags:
+  - "redis"
+  - "database"
+  - "config-set"
+  - "persistence-abuse"
+ruleVersion: "0.1.0-alpha.1"
+descriptionZh: "仿真针对 Redis CONFIG SET、SAVE 和持久化路径写入的攻击探测，标记尝试写入计划任务、SSH key 或 WebShell 的危险行为。"
+descriptionEn: "Simulates Redis CONFIG SET, SAVE, and persistence path write probes, marking attempts to write cron jobs, SSH keys, or web shells as high-risk behavior."
+protocol: "redis"
+configYaml:
+  require_auth: false
+  server_info:
+    role: "master"
+    dir: "/var/lib/redis"
+    dbfilename: "dump.rdb"
+  keys:
+    probe:config: "readonly"
+  command_responses:
+    - command: "CONFIG"
+      args_contains:
+        - "set"
+      response: "ERR CONFIG SET is disabled in this simulation"
+      event_type: "exploit_attempt"
+    - command: "SAVE"
+      response: "ERR persistence write is disabled in this simulation"
+      event_type: "exploit_attempt"
+    - command: "BGSAVE"
+      response: "ERR persistence write is disabled in this simulation"
+      event_type: "exploit_attempt"
+    - command: "SET"
+      args_contains:
+        - "authorized_keys"
+      response: "OK"
+      event_type: "exploit_attempt"
+    - command: "SET"
+      args_contains:
+        - "cron"
+      response: "OK"
+      event_type: "exploit_attempt"

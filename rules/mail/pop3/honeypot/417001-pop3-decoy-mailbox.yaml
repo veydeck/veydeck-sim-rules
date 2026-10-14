@@ -1,0 +1,49 @@
+id: 417001
+defaultPort: 110
+name: "POP3 诱捕邮箱"
+nameEn: "POP3 Decoy Mailbox"
+cve: null
+category: "honeypot"
+vendor: "Generic"
+product: "POP3 Server"
+severity: "info"
+references:
+  - "https://datatracker.ietf.org/doc/html/rfc1939"
+tags:
+  - "pop3"
+  - "mail"
+  - "honeypot"
+  - "mailbox"
+ruleVersion: "0.1.0-alpha.1"
+descriptionZh: "仿真 POP3 邮箱服务，提供静态邮件列表和邮件读取响应，用于验证邮件协议仿真与审计链路。"
+descriptionEn: "Simulates a POP3 mailbox service with static message listing and retrieval responses for protocol and audit validation."
+protocol: "pop3"
+configYaml:
+  banner: "Veydeck POP3 mailbox ready"
+  require_auth: true
+  credentials:
+    - username: "audit@example.test"
+      password: "VeydeckMail!2026"
+      display_name: "Audit Mailbox"
+  capabilities:
+    - "USER"
+    - "UIDL"
+    - "TOP"
+  messages:
+    - uid: "pop3-uid-1001"
+      from: "security@example.test"
+      to:
+        - "audit@example.test"
+      subject: "Quarterly security review"
+      date: "Tue, 16 Jun 2026 09:30:00 +0000"
+      flags:
+        - "\\Seen"
+      body: "This is a Veydeck decoy mailbox message used for protocol simulation testing."
+    - uid: "pop3-uid-1002"
+      from: "ops@example.test"
+      to:
+        - "audit@example.test"
+      subject: "VPN access notice"
+      date: "Tue, 16 Jun 2026 10:00:00 +0000"
+      flags: []
+      body: "Please review recent remote access activity in the security dashboard."
